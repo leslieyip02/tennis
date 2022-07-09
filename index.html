@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <head>
+        <title>tennis</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <base href="./">
+        <link rel="icon" type="image/svg+xml" href="favicon.png" />
+      
+        <script type="importmap">
+            {
+                "imports": {
+                  "three": "https://cdn.skypack.dev/three",
+                  "orbitControls": "https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js",
+                  "GLTFLoader": "https://cdn.skypack.dev/three@0.132.2/examples/jsm/loaders/GLTFLoader.js"
+                }
+            }
+        </script>
     
-    <base href="./">
-    <link rel="icon" type="image/svg+xml" href="favicon.png" />
-    <title>tennis</title>
-  </head>
+    </head>
 
-  <body>
-    <canvas id="court"></canvas>
-    <div id="app"></div>
+    <body>
+        <canvas id="court"></canvas>
+        <div id="app"></div>
 
-    <script type="module" src="./main.js"></script>
-  </body>
+        <script type="module" src="main.js"></script>
+    </body>
 </html>
