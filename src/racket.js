@@ -1,5 +1,3 @@
-import * as THREE from "three";
-
 export class Racket {
     constructor(scene, loader) {
         this.scene = scene;
