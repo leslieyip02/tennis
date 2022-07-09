@@ -37,11 +37,14 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 const loader = new GLTFLoader();
 
-const court = new Court(scene);
-court.render();
 
-const racket = new Racket(scene, loader);
-racket.render();
+async function loadModels() {
+    const court = new Court(scene);
+    court.render();
+    
+    const racket = new Racket(scene, loader);
+    racket.render();
+}
 
 function animate() {
     requestAnimationFrame(animate);
@@ -49,4 +52,5 @@ function animate() {
     renderer.render(scene, camera);
 }
 
+loadModels().catch(err => console.log(err));
 animate();
