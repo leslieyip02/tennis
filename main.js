@@ -26,6 +26,9 @@ net.render();
 racket.render();
 ball.render();
 
+// handle resize
+window.addEventListener("resize", e => sm.resize(), false);
+
 // handle inputs
 let keyboard = {};
 document.addEventListener("keydown", e => keyboard[e.key] = true );
