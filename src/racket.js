@@ -8,15 +8,21 @@ export class Racket {
         this.model = undefined;
 
         this.x = 0;
+        this.y = 3;
         this.z = 0;
+
         this.dx = 0;
+        this.dy = 0;
         this.dz = 0;
     }
 
     async render() {
         this.model = await this.loader.loadAsync(racketData)
             .then(data => data.scene.children[0]);
-        this.model.position.set(this.x, 10, this.z);
+        this.model.position.set(this.x, this.y, this.z);
+        // this.model.rotateZ(Math.PI / 2);
+        // this.model.rotateY(Math.PI / 4);
+        // this.model.rotateX(-Math.PI / 4 * 3);
         
         this.scene.add(this.model);
     }
@@ -42,6 +48,13 @@ export class Racket {
         // movement
         this.x += this.dx;
         this.z += this.dz;
-        this.model.position.set(this.x, 10, this.z);
+        this.model.position.set(this.x, this.y, this.z);
+
+        // if (this.model.rotation.x < Math.PI / 4)
+        //     this.model.rotation.x += 0.01;
+        // if (this.model.rotation.y < Math.PI / 4)
+        //     this.model.rotation.y += 0.01;
+        // if (this.model.rotation.z < Math.PI / 2)
+        //     this.model.rotation.z += 0.01;
     }
 }

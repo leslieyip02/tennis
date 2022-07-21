@@ -8,8 +8,9 @@ export class SceneManager {
 
         // camera
         this.camera = new THREE.OrthographicCamera(window.innerWidth / -32, window.innerWidth / 32, 
-            window.innerHeight / 32, window.innerHeight / -32, -100, 100);
-        this.camera.position.set(10, 8, -12);
+            window.innerHeight / 32, window.innerHeight / -32, -64, 64);
+        this.camera.position.set(16, 12, -12);
+        this.camera.lookAt(0, 0, 0);
 
         // renderer
         this.renderer = new THREE.WebGLRenderer({ canvas: document.querySelector("#court") });
@@ -22,7 +23,7 @@ export class SceneManager {
 
         // helpers
         const gridHelper = new THREE.GridHelper(200, 50);
-        const axesHelper = new THREE.AxesHelper(5);
+        const axesHelper = new THREE.AxesHelper(15);
         // this.scene.add(gridHelper, axesHelper);
     }
 }

@@ -24,6 +24,7 @@ export class Court {
         const leftMid = new THREE.Mesh(new THREE.PlaneGeometry(27, 16.25), fieldMaterial);
         const rightMid = new THREE.Mesh(new THREE.PlaneGeometry(27, 16.25), fieldMaterial);
         
+        // magic numbers
         leftEdge.position.set(0, 0.01, 20);
         rightEdge.position.set(0, 0.01, -20);
         bottomEdge.position.set(22.5, 0.01, 0);
