@@ -7,8 +7,8 @@ export class SceneManager {
         this.scene.background = new THREE.Color(0xa7e677);
 
         // camera
-        this.camera = new THREE.OrthographicCamera(window.innerWidth / -32, window.innerWidth / 32, 
-            window.innerHeight / 32, window.innerHeight / -32, -64, 64);
+        this.camera = new THREE.OrthographicCamera(window.innerWidth / -30, window.innerWidth / 30, 
+            window.innerHeight / 30, window.innerHeight / -30, -150, 150);
         this.camera.position.set(16, 12, -12);
         this.camera.lookAt(0, 0, 0);
         

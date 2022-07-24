@@ -18,13 +18,20 @@ const loader = new GLTFLoader();
 
 const court = new Court(scene);
 const net = new Net(scene, loader);
-const racket = new Racket(scene, loader);
 const ball = new Ball(scene);
+
+const player1Position = { x: 20, y: 2.5, z: 0 };
+const player2Position = { x: -20, y: 2.5, z: 0 };
+const player1Controls = { up: "w", left: "a", down: "s", right: "d", swing: " " };
+const player2Controls = { up: "ArrowUp", left: "ArrowLeft", down: "ArrowDown", right: "ArrowRight", swing: "Enter" };
+const player1 = new Racket(scene, loader, player1Position, 1, player1Controls);
+const player2 = new Racket(scene, loader, player2Position, -1, player2Controls);
 
 court.render();
 net.render();
-racket.render();
 ball.render();
+player1.render();
+player2.render();
 
 // handle resize
 window.addEventListener("resize", e => sm.resize(), false);
@@ -34,12 +41,49 @@ let keyboard = {};
 document.addEventListener("keydown", e => keyboard[e.key] = true );
 document.addEventListener("keyup", e => keyboard[e.key] = false );
 
-// aniamtion loop
+// reset
+function reset() {
+    ball.serve(1);
+    ball.score = [0, 0];
+
+    player1.x = player1Position.x;
+    player1.y = player1Position.y;
+    player1.z = player1Position.z;
+
+    player1.dx = 0;
+    player1.dy = 0;
+    player1.dz = 0;
+    
+    player1.rotation = { x: 0, y: 0, z: 0 };
+
+    player1.charge = 0;
+    player1.charging = false;
+    player1.swinging = false;
+
+    player2.x = player2Position.x;
+    player2.y = player2Position.y;
+    player2.z = player2Position.z;
+
+    player2.dx = 0;
+    player2.dy = 0;
+    player2.dz = 0;
+    
+    player2.rotation = { x: 0, y: 0, z: 0 };
+
+    player2.charge = 0;
+    player2.charging = false;
+    player2.swinging = false;
+}
+
+// animation loop
 function animate() {
     requestAnimationFrame(animate);
 
-    racket.update(keyboard);
-    ball.update(net);
+    if (keyboard["r"]) reset();
+
+    ball.update(net, player1, player2);
+    player1.update(keyboard, ball);
+    player2.update(keyboard, ball);
     renderer.render(scene, camera);
 }
 

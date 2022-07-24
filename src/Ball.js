@@ -7,18 +7,21 @@ export class Ball {
     constructor(scene) {
         this.scene = scene;
         this.model = undefined;
+        this.shadow = undefined;
         this.line = undefined;
         this.linePoints = 0;
-        this.shadow = undefined;
         this.boundingSphere = undefined;
 
-        this.x = 25;
-        this.y = 15;
-        this.z = 10;
+        this.x = 36;
+        this.y = 6;
+        this.z = -12;
 
-        this.dx = 0.3;
+        this.dx = 0;
         this.dy = 0;
-        this.dz = 0.1;
+        this.dz = 0;
+        this.d2z = 0;
+
+        this.score = [0, 0];
     }
 
     render() {
@@ -44,11 +47,23 @@ export class Ball {
         this.line = new THREE.Line(lineGeometry, lineMaterial);
         this.scene.add(this.line);
         
-        // collision detection
+        // collision 
         this.boundingSphere = new THREE.Sphere(this.model.position, 0.5);
     }
-    
-    update(net) {
+
+    serve(player) {
+        this.x = player * 36;
+        this.y = 6;
+        this.z = player * -12;
+        this.dx = 0;
+        this.dy = 0;
+        this.dz = 0;
+        this.d2z = 0;
+
+        this.linePoints = 0;
+    }
+
+    update(net, player1, player2) {
         if (!this.model || !net.boundingBox)
             return;
         
@@ -59,18 +74,44 @@ export class Ball {
             this.dy *= -0.95; 
         }
         
-        // temporary walls 
-        if (Math.abs(this.x) > 32)
-            this.dx *= -1;
+        // invisible walls 
+        // if (Math.abs(this.x) > 36)
+            // this.dx *= -1;
         if (Math.abs(this.z) > 24)
             this.dz *= -1;
         
+        // check out of bounds
+        if (this.x > 64) {
+            this.serve(1);
+            this.score[1] += 15;
+        } else if (this.x < -64) {
+            this.serve(-1);
+            this.score[0] += 15;
+        }
+        document.getElementById("score").textContent = `${this.score[0]} : ${this.score[1]}`;
+
         // collision 
+        // net
         if (this.boundingSphere.intersectsBox(net.boundingBox)) {
             this.x = this.x > 0 ? 1 : -1;
             this.dx *= -1;
         }
+
+        // rackets
+        if (this.boundingSphere.intersectsBox(player1.boundingBox) && 
+            player1.swinging && !player1.charging) {
+            player1.hit(this);
+        }
+
+        if (this.boundingSphere.intersectsBox(player2.boundingBox) && 
+            player2.swinging && !player2.charging) {
+            player2.hit(this);
+        }
         
+        // spin
+        this.dz += this.d2z;
+        this.d2z *= 0.95;
+
         // movement
         this.x += this.dx;
         this.y += this.dy;
