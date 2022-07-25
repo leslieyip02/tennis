@@ -2,6 +2,9 @@ import * as THREE from "three";
 
 const G = 0.01;
 const MAX_POINTS = 180;
+const scoreSound = new Audio("../sounds/score.mp3");
+const bounceSound = new Audio("../sounds/bounce.mp3");
+bounceSound.volume = 0.25;
 
 export class Ball {
     constructor(scene) {
@@ -72,21 +75,30 @@ export class Ball {
         if (this.y < 0.5) {
             this.y = 0.5;
             this.dy *= -0.95; 
+            bounceSound.currentTime = 0;
+            bounceSound.play();
         }
         
         // invisible walls 
         // if (Math.abs(this.x) > 36)
             // this.dx *= -1;
-        if (Math.abs(this.z) > 24)
+        if (Math.abs(this.z) > 24) {
             this.dz *= -1;
+            bounceSound.currentTime = 0;
+            bounceSound.play();
+        }
         
         // check out of bounds
         if (this.x > 64) {
             this.serve(1);
             this.score[1] += 15;
+            scoreSound.currentTime = 0;
+            scoreSound.play();
         } else if (this.x < -64) {
             this.serve(-1);
             this.score[0] += 15;
+            scoreSound.currentTime = 0;
+            scoreSound.play();
         }
         document.getElementById("score").textContent = `${this.score[0]} : ${this.score[1]}`;
 
@@ -95,23 +107,25 @@ export class Ball {
         if (this.boundingSphere.intersectsBox(net.boundingBox)) {
             this.x = this.x > 0 ? 1 : -1;
             this.dx *= -1;
+            bounceSound.currentTime = 0;
+            bounceSound.play();
         }
-
+        
         // rackets
         if (this.boundingSphere.intersectsBox(player1.boundingBox) && 
-            player1.swinging && !player1.charging) {
+        player1.swinging && !player1.charging) {
             player1.hit(this);
         }
-
+        
         if (this.boundingSphere.intersectsBox(player2.boundingBox) && 
-            player2.swinging && !player2.charging) {
+        player2.swinging && !player2.charging) {
             player2.hit(this);
         }
         
         // spin
         this.dz += this.d2z;
         this.d2z *= 0.95;
-
+        
         // movement
         this.x += this.dx;
         this.y += this.dy;

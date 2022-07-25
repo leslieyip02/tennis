@@ -2,6 +2,10 @@ import * as THREE from "three";
 import redRacketData from "../models/racket_red.glb?url";
 import blueRacketData from "../models/racket_blue.glb?url";
 
+const hitSound = new Audio("../sounds/hit.mp3");
+const swingSound = new Audio("../sounds/swing.mp3");
+swingSound.volume = 0.25;
+
 export class Racket {
     constructor(scene, loader, position, player, controls) {
         this.scene = scene;
@@ -82,6 +86,9 @@ export class Racket {
                 }   
             }
         }
+
+        swingSound.currentTime = 0;
+        swingSound.play();
     }
 
     forehand() {
@@ -137,6 +144,9 @@ export class Racket {
 
         this.charge = 0;
         this.swinging = false;
+
+        hitSound.currentTime = 0;
+        hitSound.play();
     }
 
     update(keyboard, ball) {
