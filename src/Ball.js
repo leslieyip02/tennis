@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-const G = 0.01;
+const G = 0.0003;
 const MAX_POINTS = 180;
 const scoreSound = new Audio("../sounds/score.mp3");
 const bounceSound = new Audio("../sounds/bounce.mp3");
@@ -66,7 +66,7 @@ export class Ball {
         this.linePoints = 0;
     }
 
-    update(net, player1, player2) {
+    update(net, player1, player2, dt) {
         if (!this.model || !net.boundingBox)
             return;
         
@@ -125,11 +125,12 @@ export class Ball {
         // spin
         this.dz += this.d2z;
         this.d2z *= 0.95;
+        // this.d2z *= 0.95;
         
         // movement
-        this.x += this.dx;
-        this.y += this.dy;
-        this.z += this.dz;
+        this.x += this.dx * dt;
+        this.y += this.dy * dt;
+        this.z += this.dz * dt;
         this.model.position.set(this.x, this.y, this.z);
         this.boundingSphere.set(this.model.position, 0.5);
         

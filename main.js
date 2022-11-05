@@ -76,15 +76,20 @@ function reset() {
 }
 
 // animation loop
-function animate() {
-    requestAnimationFrame(animate);
+let t0 = 0;
 
+function animate(timestamp) {
+    let dt = timestamp - t0;
+    t0 = timestamp;
+    
     if (keyboard["r"]) reset();
-
-    ball.update(net, player1, player2);
-    player1.update(keyboard, ball);
-    player2.update(keyboard, ball);
+    
+    ball.update(net, player1, player2, dt);
+    player1.update(keyboard, ball, dt);
+    player2.update(keyboard, ball, dt);
     renderer.render(scene, camera);
+    
+    requestAnimationFrame(animate);
 }
 
 animate();

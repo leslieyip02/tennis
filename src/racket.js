@@ -134,13 +134,16 @@ export class Racket {
 
         // rotation x tied to dy
         // rotation y tied to dx and dz
-        ball.dx = this.player * -Math.min(Math.abs(this.rotation.y) * 5, 0.8) * Math.random(1.0, 1.5);
-        ball.dz = this.rotation.y * -0.8 * Math.random(1.0, 1.2) * (Math.random() > 0.3 ? 1 : -1);
-        ball.dy = Math.min(Math.abs(this.rotation.x) * 3, 0.3);
+        ball.dx = this.player * -Math.min(Math.abs(this.rotation.y) * 0.2, 0.8) * Math.random(1.0, 1.5);
+        ball.dz = this.rotation.y * -0.08 * Math.random(0.10, 0.12) * (Math.random() > 0.3 ? 1 : -1);
+        ball.dy = Math.min(Math.abs(this.rotation.x) * 0.2, 0.03);
+        // ball.dx = this.player * -Math.min(Math.abs(this.rotation.y) * 5, 0.8) * Math.random(1.0, 1.5);
+        // ball.dz = this.rotation.y * -0.8 * Math.random(1.0, 1.2) * (Math.random() > 0.3 ? 1 : -1);
+        // ball.dy = Math.min(Math.abs(this.rotation.x) * 3, 0.3);
 
         // spin
         if (this.charge > 200) 
-            ball.d2z = Math.min(this.charge * 0.0001, 0.01) * (Math.random() > 0.5 ? 1 : -1);
+            ball.d2z = 0.05 * Math.min(this.charge * 0.0001, 0.01) * (Math.random() > 0.5 ? 1 : -1);
 
         this.charge = 0;
         this.swinging = false;
@@ -149,7 +152,7 @@ export class Racket {
         hitSound.play();
     }
 
-    update(keyboard, ball) {
+    update(keyboard, ball, dt) {
         if (!this.model)
             return;
         
@@ -173,10 +176,10 @@ export class Racket {
         this.rotation.z *= 0.8;
 
         // read keyboard input
-        if (keyboard[this.controls.up]) this.dx += -0.1;
-        if (keyboard[this.controls.left]) this.dz += 0.1;
-        if (keyboard[this.controls.down]) this.dx += 0.1;
-        if (keyboard[this.controls.right]) this.dz += -0.1;
+        if (keyboard[this.controls.up]) this.dx += -0.008;
+        if (keyboard[this.controls.left]) this.dz += 0.008;
+        if (keyboard[this.controls.down]) this.dx += 0.008;
+        if (keyboard[this.controls.right]) this.dz += -0.008;
         
         this.charging = false;
         this.swinging = !Object.values(this.rotation).every(r => Math.abs(r) < 0.05);
@@ -188,12 +191,12 @@ export class Racket {
 
         // movement
         if (this.player == 1) {
-            this.x = Math.max(this.x + this.dx, 6);
+            this.x = Math.max(this.x + this.dx * dt, 6);
         } else {
-            this.x = Math.min(this.x + this.dx, -6);
+            this.x = Math.min(this.x + this.dx * dt, -6);
         }
         
-        this.z += this.dz;
+        this.z += this.dz * dt;
         this.model.position.set(this.x, this.y, this.z);
         
         // rotation
